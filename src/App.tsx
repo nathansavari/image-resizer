@@ -2,23 +2,34 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<Image>(null);
+
+  const [name, setName] = useState("");
+
+  type Image = CanvasImageSource | null;
+
+  let img: Image;
 
   const handleDrop = (e: any) => {
     e.preventDefault();
-
     let reader = new FileReader();
-
     reader.onload = (event) => {
-      let img: HTMLImageElement | null = new Image();
-      console.log(reader);
+      img = new Image();
+      if (!img) return;
 
-      img.src = event?.target?.result;
+      if (typeof event?.target?.result === "string") {
+        img.src = event.target.result;
+      }
+
       img.onload = () => {
         setImage(img);
       };
     };
-    reader.readAsDataURL(e.dataTransfer.files[0]);
+    let file = e.dataTransfer.files[0];
+    console.log(`Dropped Image Name: ${file.name}`);
+
+    setName(file.name);
+    reader.readAsDataURL(file);
   };
 
   const handleDownload = () => {
@@ -36,7 +47,7 @@ function App() {
 
     let link = document.createElement("a");
     link.href = canvas.toDataURL();
-    link.download = "resized-image.jpg";
+    link.download = `${name}`;
     link.click();
   };
 
@@ -67,20 +78,19 @@ function App() {
           </defs>
         </svg>
       </div>{" "}
-      <div
-        style={{
-          marginLeft: "2rem",
-        }}
-      >
+      <div>
         {image ? (
-          <button
-            onClick={handleDownload}
-            style={{
-              cursor: "pointer",
-            }}
-          >
-            Download Resized Image
-          </button>
+          <>
+            <p>{name}</p>
+            <button
+              onClick={handleDownload}
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              Download
+            </button>
+          </>
         ) : (
           <div>
             <p>Drop an image here to resize</p>
