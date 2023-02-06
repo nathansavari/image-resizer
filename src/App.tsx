@@ -6,10 +6,11 @@ function App() {
   const [name, setName] = useState("");
   const [height, setHeight] = useState<number>();
   const [width, setWidth] = useState<number>();
+  const [ratio, setRatio] = useState<number>();
 
   type Image = CanvasImageSource | null;
 
-  let img: Image;
+  let img: any;
 
   const handleDrop = (e: any) => {
     e.preventDefault();
@@ -23,10 +24,10 @@ function App() {
       }
 
       img.onload = () => {
-        console.log(`Original Image Size: ${img?.width} x ${img?.height}`);
         setImage(img);
         setHeight(Number(img?.height));
         setWidth(Number(img?.width));
+        setRatio(img?.width / img?.height);
       };
     };
     let file = e.dataTransfer.files[0];
@@ -51,8 +52,8 @@ function App() {
     ctx.drawImage(image, 0, 0, 600, 400);
 
     let link = document.createElement("a");
-    link.href = canvas.toDataURL();
-    link.download = `${name}`;
+    link.href = canvas.toDataURL("image/jpg", 1);
+    link.download = `${name.split(".")[0]}.jpeg`;
     link.click();
   };
 
@@ -91,6 +92,11 @@ function App() {
               Size: {width}x{height}
             </p>
 
+            {ratio === 1.5 ? (
+              <p style={{ color: "green" }}>Ratio: {ratio}</p>
+            ) : (
+              <p style={{ color: "red" }}>Ratio (has to be 1.5): {ratio}</p>
+            )}
             <button
               onClick={handleDownload}
               style={{
@@ -99,6 +105,17 @@ function App() {
             >
               Download the resized image
             </button>
+            <p>
+              Then go to{" "}
+              <a
+                href="https://tinyjpg.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Tiny jpg
+              </a>{" "}
+              to reduce the weight.
+            </p>
           </>
         ) : (
           <div>
