@@ -3,8 +3,9 @@ import "./App.css";
 
 function App() {
   const [image, setImage] = useState<Image>(null);
-
   const [name, setName] = useState("");
+  const [height, setHeight] = useState<number>();
+  const [width, setWidth] = useState<number>();
 
   type Image = CanvasImageSource | null;
 
@@ -22,13 +23,17 @@ function App() {
       }
 
       img.onload = () => {
+        console.log(`Original Image Size: ${img?.width} x ${img?.height}`);
         setImage(img);
+        setHeight(Number(img?.height));
+        setWidth(Number(img?.width));
       };
     };
     let file = e.dataTransfer.files[0];
     console.log(`Dropped Image Name: ${file.name}`);
 
     setName(file.name);
+
     reader.readAsDataURL(file);
   };
 
@@ -81,14 +86,18 @@ function App() {
       <div>
         {image ? (
           <>
-            <p>{name}</p>
+            <strong>{name}</strong>
+            <p>
+              Size: {width}x{height}
+            </p>
+
             <button
               onClick={handleDownload}
               style={{
                 cursor: "pointer",
               }}
             >
-              Download
+              Download the resized image
             </button>
           </>
         ) : (
