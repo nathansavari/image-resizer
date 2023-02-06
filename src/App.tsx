@@ -7,6 +7,7 @@ function App() {
   const [height, setHeight] = useState<number>();
   const [width, setWidth] = useState<number>();
   const [ratio, setRatio] = useState<number>();
+  const [weight, setWeight] = useState<any>();
 
   type Image = CanvasImageSource | null;
 
@@ -28,10 +29,11 @@ function App() {
         setHeight(Number(img?.height));
         setWidth(Number(img?.width));
         setRatio(img?.width / img?.height);
+        setWeight((e.dataTransfer.files[0].size / 1024).toFixed(2));
       };
     };
     let file = e.dataTransfer.files[0];
-    console.log(`Dropped Image Name: ${file.name}`);
+    setWeight((e.dataTransfer.files[0].size / 1024).toFixed(2));
 
     setName(file.name);
 
@@ -91,6 +93,7 @@ function App() {
             <p>
               Size: {width}x{height}
             </p>
+            <p>Weight: {weight}ko</p>
 
             {ratio === 1.5 ? (
               <p style={{ color: "green" }}>Ratio: {ratio}</p>
