@@ -41,3 +41,7 @@
 .drop:hover {
   background-color: rgba(220, 20, 60, 0.265);
 }
+
+img {
+  object-fit: contain;
+}
