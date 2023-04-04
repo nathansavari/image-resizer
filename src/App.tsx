@@ -9,7 +9,7 @@ function App() {
   const [ratio, setRatio] = useState<number>();
   const [weight, setWeight] = useState<any>();
 
-  type Image = CanvasImageSource | null;
+  type Image = any;
 
   let img: any;
 
@@ -119,9 +119,14 @@ function App() {
               <p>Weight: {weight}ko</p>
 
               {ratio === 1.5 ? (
-                <p style={{ color: "green" }}>Ratio: {ratio}</p>
+                <p>
+                  Ratio: <span style={{ color: "green" }}>{ratio}</span>
+                </p>
               ) : (
-                <p style={{ color: "red" }}>Ratio (has to be 1.5): {ratio}</p>
+                <p>
+                  Ratio (has to be 1.5):
+                  <span style={{ color: "red" }}>{ratio}</span>
+                </p>
               )}
               <button
                 onClick={handleDownload}
